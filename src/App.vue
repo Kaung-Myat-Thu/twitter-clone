@@ -1,30 +1,32 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <Header />
+  <main class="flex-1 overflow-scroll">
+    <router-view />
+  </main>
+  <Footer :routes="routes" />
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import Header from "@/components/Header.vue";
+import Footer from "@/components/Footer.vue";
+import { ref, onBeforeMount } from "vue";
+import { useRouter } from "vue-router";
 
-nav {
-  padding: 30px;
-}
+export default {
+  setup() {
+    const routes = ref([]);
+    const router = useRouter();
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+    onBeforeMount(() => {
+      routes.value = router.options.routes.filter((r) => r.mainMenu);
+    });
+    return {
+      routes,
+    };
+  },
+  components: {
+    Header,
+    Footer,
+  },
+};
+</script>
